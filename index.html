@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="
+https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js
+"></script>
+</head>
+
+<body class="dark-theme">
+    <main>
+        <aside>
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M11 2.04938V13H21.9506C21.4489 18.0533 17.1853 22 12 22C6.47715 22 2 17.5229 2 12C2 6.81465 5.94668 2.5511 11 2.04938ZM13 2.04938C17.7244 2.51845 21.4816 6.27559 21.9506 11H13V2.04938Z">
+                    </path>
+                </svg>
+                <div>
+                    <h3>FinTrack Pro</h3>
+                    <p>Enterprise Finance</p>
+                </div>
+            </div>
+
+            <div class="nav-logo">
+                <div>
+                    <div class="nav-btn active dashboard-btn">
+                        <i class="ri-dashboard-horizontal-fill"></i>
+                        <p>Dashboard</p>
+                    </div>
+                    <div class="nav-btn settings-btn">
+                        <i class="ri-settings-3-fill"></i>
+                        <p>Settings</p>
+                    </div>
+                </div>
+                <button class="add-btn"><i class="ri-add-fill"></i> Add Transaction</button>
+            </div>
+        </aside>
+        <div class="content-container scroll">
+            <div class="heading">
+                <h1>Financial Overview</h1>
+                <p>Real-time tracking application</p>
+            </div>
+            <div class="cards-container">
+                <div class="card current-balance">
+                    <div>
+                        <i class="ri-bank-fill"></i>
+                    </div>
+                    <p>Current Balance</p>
+                    <p id="current-balance">$0.00</p>
+                </div>
+                <div class="card total-income">
+                    <div>
+                        <i class="ri-line-chart-line"></i>
+                    </div>
+                    <p>Total Income</p>
+                    <p id="total-income">$0.00</p>
+                </div>
+                <div class="card total-expense">
+                    <div>
+                        <i class="ri-line-chart-line"></i>
+                    </div>
+                    <p>Total Expense</p>
+                    <p id="total-expense">$0.00</p>
+                </div>
+                <div class="card total-transactions">
+                    <div>
+                        <i class="ri-bank-card-fill"></i>
+                    </div>
+                    <p>Total Transaction</p>
+                    <p id="total-transactions">0</p>
+                </div>
+
+            </div>
+            <div class="chart-section">
+                <div class="chart-container">
+                    <h2>Cash Flow Analysis</h2>
+                    <div class="chart-parent">
+                        <canvas style="width: 100%; height: 100%;" class="chart-area"></canvas>
+                    </div>
+                </div>
+                <div class="preferences">
+                    <h2>Preferences</h2>
+                    <div class="dark-mode">
+                        <p>Dark Mode</p>
+                        <div class="toggle">
+                            <div class="toggle-circle"></div>
+                        </div>
+                    </div>
+                    <button class="reset-btn"><i class="ri-delete-bin-2-fill"></i> Restart All Data</button>
+                </div>
+            </div>
+            <div class="transactions-section">
+                <h2>All Transactions</h2>
+                <div class="transaction-search">
+                    <div class="search">
+                        <i class="ri-search-line"></i>
+                        <input type="text" placeholder="Search transactions...">
+                    </div>
+                    <select name="types" id="types" class="filter">
+                        <option value="All Types">All Types</option>
+                        <option value="Income Only">Income Only</option>
+                        <option value="Expense Only">Expense Only</option>
+                    </select>
+                </div>
+                <div class="transactions">
+                    <div class="transaction-details">
+                        <p>DATE</p>
+                        <p>DESCRIPTION</p>
+                        <p>CATEGORY</p>
+                        <p>AMOUNT</p>
+                        <p>ACTIONS</p>
+                    </div>
+                    <div class="transactions-container">
+                        <!-- <div class="transaction" data-type='income'>
+                            <p>2026-07-01</p>
+                            <p>salary</p>
+                            <p>Salary</p>
+                            <p>+$900.00</p>
+                            <div>
+                                <i class="ri-pencil-fill"></i>
+                                <i class="ri-delete-bin-2-fill"></i>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="add-transaction-container none">
+            <div class="add-transaction">
+                <div class="add-trans-top">
+                    <h2>Add Transaction</h2>
+                    <i class="ri-close-fill"></i>
+                </div>
+                <p>Type</p>
+                <select name="type" id="type" class="add-trans-type">
+                    <option value="Income">Income</option>
+                    <option value="Expense">Expense</option>
+                </select>
+                <p>Description</p>
+                <input class="add-trans-description" type="text" placeholder="e.g. Amazon, Salary, Coffee">
+                <div class="add-trans-merged">
+                    <div>
+                        <p>Amount</p>
+                        <input class="add-trans-amount" type="number">
+                    </div>
+                    <div>
+                        <p>Date</p>
+                        <input class="add-trans-date" type="date">
+                    </div>
+                </div>
+                <p>Category</p>
+                <select name="category" id="category" class="add-trans-category">
+                    <optgroup label="Select a category">
+                        <option value="Food & Dining">Food & Dining</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Recharge & Bills">Recharge & Bills</option>
+                        <option value="Petrol & Auto">Petrol & Auto</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Other">Other</option>
+                    </optgroup>
+                </select>
+                <button class="save-transaction">Save Transaction</button>
+            </div>
+        </div>
+    </main>
+</body>
+<script src="server.js"></script>
+
+</html>
