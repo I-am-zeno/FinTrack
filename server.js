@@ -1,4 +1,4 @@
-const ctx = document.querySelector('.chart-area')
+const ctx = document.querySelector('.chart-area').getContext('2d')
 const transactionsContainer = document.querySelector('.transactions-container')
 const addTransactionContainer = document.querySelector('.add-transaction-container')
 const main = document.querySelector('main')
@@ -63,7 +63,7 @@ function updateCards(){
     income = totalIncome
     expense = totalExpense
 
-    // updateChart()
+    updateChart()
 }
 
 function renderTransactions() {
@@ -138,9 +138,13 @@ function updateChart() {
         data: {
             labels: ["Income vs Expense"],
             datasets: [
-                { label: 'Income', data: [200], backgroundColor: '#166534', borderRadius: 4 },
-                { label: 'Expense', data: [300], backgroundColor: '#991b1b', borderRadius: 4 }
+                { label: 'Income', data: [income], backgroundColor: '#166534', borderRadius: 4 },
+                { label: 'Expense', data: [expense], backgroundColor: '#991b1b', borderRadius: 4 }
             ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false // Crucial: stops the height from stretching infinitely
         }
     })
 }
