@@ -4,13 +4,14 @@ const addTransactionContainer = document.querySelector('.add-transaction-contain
 const main = document.querySelector('main')
 // const addTransaction = document.querySelector('.add-transaction')
 // console.log(addTransaction)
+// localStorage.clear()
 
 let myChart = null
 let income = 0
 let expense = 0
 
-const transactions = getLocalStorage()
-console.log(transactions)
+let transactions = getLocalStorage()
+
 function updateCards(){
     const totalIncome = transactions.reduce((acc,curr)=>{
         if(curr.type == 'Income'){
@@ -45,7 +46,7 @@ function updateCards(){
 
 function renderTransactions() {
     transactionsContainer.innerHTML = transactions.map(t => `
-        <div class="transaction" data-type=${t.type}>
+        <div class="transaction" data-type=${t.type} data-id=${t.id}>
             <p>${t.date}</p>
             <p>${t.description}</p>
             <div>
@@ -53,8 +54,8 @@ function renderTransactions() {
             </div>
             <p>${t.type == 'Income' ? '+' : '-'}$${t.amount}</p>
             <div>
-                <i class="ri-pencil-fill"></i>
-                <i class="ri-delete-bin-2-fill"></i>
+                <i class="ri-pencil-fill edit"></i>
+                <i class="ri-delete-bin-2-fill remove"></i>
             </div>
         </div>
     `).join('');
@@ -79,6 +80,7 @@ function createTransaction(e) {
     }
 
     const newTransaction = {
+        id: Date.now(),
         type,
         description,
         amount,
@@ -94,6 +96,23 @@ function createTransaction(e) {
     parent.closest('.add-transaction-container').classList.add('none')
 }
 
+function removeTransaction(e){
+    const parent = e.closest('.transaction')
+
+    const permission = confirm('Are you sure you want to delet this transaction')
+
+    if(!permission) return
+
+    const updatedData = transactions.filter(t=>t.id != parent.dataset.id)
+    
+    transactions = updatedData
+
+    setLocalStorage(updatedData)
+
+    parent.remove()
+    updateCards()
+}
+
 document.body.addEventListener('click', (e) => {
     if (e.target.closest('.ri-close-fill')) {
         toggleTransaction()
@@ -105,6 +124,10 @@ document.body.addEventListener('click', (e) => {
     }
     if (e.target.closest('.save-transaction')) {
         createTransaction(e.target)
+        return
+    }
+    if (e.target.closest('.remove')) {
+        removeTransaction(e.target)
         return
     }
 })
