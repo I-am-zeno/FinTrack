@@ -9,8 +9,22 @@ const main = document.querySelector('main')
 let myChart = null
 let income = 0
 let expense = 0
+let currency = localStorage.getItem('currency')
+    ? JSON.parse(localStorage.getItem('currency'))
+    : '$'
 
 let transactions = getLocalStorage()
+
+function updateCurrency(e) {
+    const newValue = e.closest('#currency').value.slice(5, 6)
+
+    if (newValue == currency) return
+
+    currency = newValue
+    updateCards()
+    renderTransactions()
+    localStorage.setItem('currency', JSON.stringify(currency))
+}
 
 function updateCards() {
     const totalInEx = transactions.reduce((a, c) => {
@@ -25,9 +39,9 @@ function updateCards() {
 
     const totalTransactions = transactions.length
 
-    main.querySelector('#current-balance').textContent = '$' + currentBalance
-    main.querySelector('#total-income').textContent = '$' + (totalInEx.totalIncome || 0)
-    main.querySelector('#total-expense').textContent = '$' + (totalInEx.totalExpense || 0)
+    main.querySelector('#current-balance').textContent = currency + currentBalance
+    main.querySelector('#total-income').textContent = currency + (totalInEx.totalIncome || 0)
+    main.querySelector('#total-expense').textContent = currency + (totalInEx.totalExpense || 0)
     main.querySelector('#total-transactions').textContent = totalTransactions
 
     income = totalInEx.totalIncome || 0
@@ -44,7 +58,7 @@ function renderTransactions() {
             <div>
             <p>${t.category}</p>
             </div>
-            <p>${t.type == 'Income' ? '+' : '-'}$${t.amount}</p>
+            <p>${t.type == 'Income' ? '+' : '-'} ${currency}${t.amount}</p>
             <div>
                 <i class="ri-pencil-fill edit"></i>
                 <i class="ri-delete-bin-2-fill remove"></i>
@@ -185,8 +199,23 @@ document.body.addEventListener('click', (e) => {
         document.body.classList.toggle('dark-theme')
         return
     }
+    if (e.target.closest('#currency')) {
+        updateCurrency(e.target)
+        return
+    }
 })
 
+function setCurrency() {
+    const curr = main.querySelector('#currency')
+
+    if (currency == '$') curr.value = curr[0].value
+    if (currency == '€') curr.value = curr[1].value
+    if (currency == '£') curr.value = curr[2].value
+    if (currency == '₹') curr.value = curr[3].value
+    if (currency == '¥') curr.value = curr[4].value
+}
+
+setCurrency()
 updateChart()
 renderTransactions()
 updateCards()
