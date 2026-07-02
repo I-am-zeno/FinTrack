@@ -12,30 +12,30 @@ let expense = 0
 
 let transactions = getLocalStorage()
 
-function updateCards(){
-    const totalIncome = transactions.reduce((acc,curr)=>{
-        if(curr.type == 'Income'){
+function updateCards() {
+    const totalIncome = transactions.reduce((acc, curr) => {
+        if (curr.type == 'Income') {
             return acc + Number(curr.amount)
         }
 
         return acc
-    },0)   
+    }, 0)
 
-    const totalExpense = transactions.reduce((acc,curr)=>{
-        if(curr.type == 'Expense'){
+    const totalExpense = transactions.reduce((acc, curr) => {
+        if (curr.type == 'Expense') {
             return acc + Number(curr.amount)
         }
 
         return acc
-    },0)   
+    }, 0)
 
     const currentBalance = totalIncome - totalExpense
-    
+
     const totalTransactions = transactions.length
-    
-    main.querySelector('#current-balance').textContent = '$'+ currentBalance
-    main.querySelector('#total-income').textContent = '$'+ totalIncome
-    main.querySelector('#total-expense').textContent = '$'+ totalExpense
+
+    main.querySelector('#current-balance').textContent = '$' + currentBalance
+    main.querySelector('#total-income').textContent = '$' + totalIncome
+    main.querySelector('#total-expense').textContent = '$' + totalExpense
     main.querySelector('#total-transactions').textContent = totalTransactions
 
     income = totalIncome
@@ -62,10 +62,6 @@ function renderTransactions() {
 
 }
 
-function toggleTransaction() {
-    addTransactionContainer.classList.toggle('none')
-}
-
 function createTransaction(e) {
     const parent = e.closest('.add-transaction')
     const type = parent.children[2].value
@@ -89,6 +85,7 @@ function createTransaction(e) {
         category
     }
 
+    closeTransaction()
     transactions.unshift(newTransaction)
     setLocalStorage(transactions)
     updateCards()
@@ -97,15 +94,27 @@ function createTransaction(e) {
     parent.closest('.add-transaction-container').classList.add('none')
 }
 
-function removeTransaction(e){
+function closeTransaction() {
+    const grandParent = main.querySelector(".add-transaction-container")
+    const parent = main.querySelector(".add-transaction")
+
+    parent.children[4].value = ''
+    parent.children[5].children[0].children[1].value = ''
+    parent.children[5].children[1].children[1].value = ''
+
+    grandParent.classList.toggle('none')
+    return
+}
+
+function removeTransaction(e) {
     const parent = e.closest('.transaction')
 
     const permission = confirm('Are you sure you want to delet this transaction')
 
-    if(!permission) return
+    if (!permission) return
 
-    const updatedData = transactions.filter(t=>t.id != parent.dataset.id)
-    
+    const updatedData = transactions.filter(t => t.id != parent.dataset.id)
+
     transactions = updatedData
 
     setLocalStorage(updatedData)
@@ -114,38 +123,17 @@ function removeTransaction(e){
     updateCards()
 }
 
-function reset(e){
-    if(transactions.length === 0) return
-    
+function reset() {
+    if (transactions.length === 0) return
+
+    if(!confirm('Are you sure you want to remove all the existing data')) return
+
     transactions = []
     clearLocalStorage()
 
     updateCards()
     renderTransactions()
 }
-
-document.body.addEventListener('click', (e) => {
-    if (e.target.closest('.ri-close-fill')) {
-        toggleTransaction()
-        return
-    }
-    if (e.target.closest('.add-btn')) {
-        toggleTransaction()
-        return
-    }
-    if (e.target.closest('.save-transaction')) {
-        createTransaction(e.target)
-        return
-    }
-    if (e.target.closest('.remove')) {
-        removeTransaction(e.target)
-        return
-    }
-    if (e.target.closest('.reset-btn')) {
-        reset(e.target)
-        return
-    }
-})
 
 function updateChart() {
     if (myChart) { myChart.destroy() }
@@ -165,22 +153,45 @@ function updateChart() {
     })
 }
 
-function setLocalStorage(arr){
-    if(!arr || !Array.isArray(arr)) return
+function setLocalStorage(arr) {
+    if (!arr || !Array.isArray(arr)) return
     localStorage.setItem('transactions', JSON.stringify(arr))
 }
 
-function getLocalStorage(){
-    const data = localStorage.getItem('transactions') 
-    ? JSON.parse(localStorage.getItem('transactions'))
-    : []
+function getLocalStorage() {
+    const data = localStorage.getItem('transactions')
+        ? JSON.parse(localStorage.getItem('transactions'))
+        : []
 
     return data
 }
 
-function clearLocalStorage(){
+function clearLocalStorage() {
     localStorage.clear()
 }
+
+document.body.addEventListener('click', (e) => {
+    if (e.target.closest('.ri-close-fill')) {
+        closeTransaction(e.target)
+    }
+    if (e.target.closest('.add-btn')) {
+        const grandParent = main.querySelector(".add-transaction-container")
+        grandParent.classList.toggle('none')
+        return
+    }
+    if (e.target.closest('.save-transaction')) {
+        createTransaction(e.target)
+        return
+    }
+    if (e.target.closest('.remove')) {
+        removeTransaction(e.target)
+        return
+    }
+    if (e.target.closest('.reset-btn')) {
+        reset()
+        return
+    }
+})
 
 updateChart()
 renderTransactions()
