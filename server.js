@@ -9,32 +9,9 @@ let myChart = null
 let income = 0
 let expense = 0
 
-const transactions = [
-    {
-        date: "2026-20-20",
-        description: 'Coffee',
-        category: 'Shopping',
-        type: 'Expense',
-        amount: '900'
-    },
-    {
-        date: "20-20-20",
-        description: 'Coffee',
-        category: 'Shopping',
-        type: 'Income',
-        amount: '600'
-    },
-    {
-        date: "20-20-20",
-        description: 'Coffee',
-        category: 'Shopping',
-        type: 'Income',
-        amount: '60'
-    },
-]
-
+const transactions = getLocalStorage()
+console.log(transactions)
 function updateCards(){
-    // update cards here
     const totalIncome = transactions.reduce((acc,curr)=>{
         if(curr.type == 'Income'){
             return acc + Number(curr.amount)
@@ -110,6 +87,7 @@ function createTransaction(e) {
     }
 
     transactions.unshift(newTransaction)
+    setLocalStorage(transactions)
     updateCards()
     renderTransactions()
     console.log(transactions)
@@ -147,6 +125,19 @@ function updateChart() {
             maintainAspectRatio: false // Crucial: stops the height from stretching infinitely
         }
     })
+}
+
+function setLocalStorage(arr){
+    if(!arr || !Array.isArray(arr)) return
+    localStorage.setItem('transactions', JSON.stringify(arr))
+}
+
+function getLocalStorage(){
+    const data = localStorage.getItem('transactions') 
+    ? JSON.parse(localStorage.getItem('transactions'))
+    : []
+
+    return data
 }
 
 updateChart()
