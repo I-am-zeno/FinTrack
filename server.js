@@ -138,7 +138,7 @@ function updateChart() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false // Crucial: stops the height from stretching infinitely
+            maintainAspectRatio: false
         }
     })
 }
