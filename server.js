@@ -1,16 +1,13 @@
 const ctx = document.querySelector('.chart-area')
 const transactionsContainer = document.querySelector('.transactions-container')
 const addTransactionContainer = document.querySelector('.add-transaction-container')
+const main = document.querySelector('main')
 // const addTransaction = document.querySelector('.add-transaction')
 // console.log(addTransaction)
 
 let myChart = null
-
-
-function updateCards(){
-    // update cards here
-    
-}
+let income = 0
+let expense = 0
 
 const transactions = [
     {
@@ -31,10 +28,43 @@ const transactions = [
         date: "20-20-20",
         description: 'Coffee',
         category: 'Shopping',
-        type: 'Expense',
+        type: 'Income',
         amount: '60'
     },
 ]
+
+function updateCards(){
+    // update cards here
+    const totalIncome = transactions.reduce((acc,curr)=>{
+        if(curr.type == 'Income'){
+            return acc + Number(curr.amount)
+        }
+
+        return acc
+    },0)   
+
+    const totalExpense = transactions.reduce((acc,curr)=>{
+        if(curr.type == 'Expense'){
+            return acc + Number(curr.amount)
+        }
+
+        return acc
+    },0)   
+
+    const currentBalance = totalIncome - totalExpense
+    
+    const totalTransactions = transactions.length
+    
+    main.querySelector('#current-balance').textContent = '$'+ currentBalance
+    main.querySelector('#total-income').textContent = '$'+ totalIncome
+    main.querySelector('#total-expense').textContent = '$'+ totalExpense
+    main.querySelector('#total-transactions').textContent = totalTransactions
+
+    income = totalIncome
+    expense = totalExpense
+
+    // updateChart()
+}
 
 function renderTransactions() {
     transactionsContainer.innerHTML = transactions.map(t => `
@@ -80,6 +110,7 @@ function createTransaction(e) {
     }
 
     transactions.unshift(newTransaction)
+    updateCards()
     renderTransactions()
     console.log(transactions)
     parent.closest('.add-transaction-container').classList.add('none')
@@ -108,11 +139,12 @@ function updateChart() {
             labels: ["Income vs Expense"],
             datasets: [
                 { label: 'Income', data: [200], backgroundColor: '#166534', borderRadius: 4 },
-                { label: 'Expense', data: [100], backgroundColor: '#991b1b', borderRadius: 4 }
+                { label: 'Expense', data: [300], backgroundColor: '#991b1b', borderRadius: 4 }
             ]
         }
     })
 }
 
-renderTransactions()
 updateChart()
+renderTransactions()
+updateCards()
