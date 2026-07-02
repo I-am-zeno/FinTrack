@@ -59,6 +59,7 @@ function renderTransactions() {
             </div>
         </div>
     `).join('');
+
 }
 
 function toggleTransaction() {
@@ -113,6 +114,16 @@ function removeTransaction(e){
     updateCards()
 }
 
+function reset(e){
+    if(transactions.length === 0) return
+    
+    transactions = []
+    clearLocalStorage()
+
+    updateCards()
+    renderTransactions()
+}
+
 document.body.addEventListener('click', (e) => {
     if (e.target.closest('.ri-close-fill')) {
         toggleTransaction()
@@ -128,6 +139,10 @@ document.body.addEventListener('click', (e) => {
     }
     if (e.target.closest('.remove')) {
         removeTransaction(e.target)
+        return
+    }
+    if (e.target.closest('.reset-btn')) {
+        reset(e.target)
         return
     }
 })
@@ -161,6 +176,10 @@ function getLocalStorage(){
     : []
 
     return data
+}
+
+function clearLocalStorage(){
+    localStorage.clear()
 }
 
 updateChart()
