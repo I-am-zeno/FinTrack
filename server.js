@@ -13,33 +13,25 @@ let expense = 0
 let transactions = getLocalStorage()
 
 function updateCards() {
-    const totalIncome = transactions.reduce((acc, curr) => {
-        if (curr.type == 'Income') {
-            return acc + Number(curr.amount)
-        }
+    const totalInEx = transactions.reduce((a, c) => {
+        const key = `total${c.type}`
+        a[key] = (a[key] || 0) + Number(c.amount)
+        return a
+    }, {})
 
-        return acc
-    }, 0)
-
-    const totalExpense = transactions.reduce((acc, curr) => {
-        if (curr.type == 'Expense') {
-            return acc + Number(curr.amount)
-        }
-
-        return acc
-    }, 0)
-
-    const currentBalance = totalIncome - totalExpense
+    const currentBalance =
+        (totalInEx.totalIncome || 0) -
+        (totalInEx.totalExpense || 0)
 
     const totalTransactions = transactions.length
 
     main.querySelector('#current-balance').textContent = '$' + currentBalance
-    main.querySelector('#total-income').textContent = '$' + totalIncome
-    main.querySelector('#total-expense').textContent = '$' + totalExpense
+    main.querySelector('#total-income').textContent = '$' + (totalInEx.totalIncome || 0)
+    main.querySelector('#total-expense').textContent = '$' + (totalInEx.totalExpense || 0)
     main.querySelector('#total-transactions').textContent = totalTransactions
 
-    income = totalIncome
-    expense = totalExpense
+    income = totalInEx.totalIncome || 0
+    expense = totalInEx.totalExpense || 0
 
     updateChart()
 }
@@ -64,12 +56,11 @@ function renderTransactions() {
 
 function createTransaction(e) {
     const parent = e.closest('.add-transaction')
-    const type = parent.children[2].value
-    const description = parent.children[4].value
-    const amount = parent.children[5].children[0].children[1].value
-    const date = parent.children[5].children[1].children[1].value
-    const category = parent.children[7].value
-    console.log(type, description, amount, date, category)
+    const type = parent.querySelector('[name= "type"]').value
+    const description = parent.querySelector('[name= "description"]').value
+    const amount = parent.querySelector('[name= "amount"]').value
+    const date = parent.querySelector('[name= "date"]').value
+    const category = parent.querySelector('[name= "category"]').value
 
     if (!type || !description || !amount || !date || !category) {
         alert('All fields are required')
@@ -90,7 +81,6 @@ function createTransaction(e) {
     setLocalStorage(transactions)
     updateCards()
     renderTransactions()
-    console.log(transactions)
     parent.closest('.add-transaction-container').classList.add('none')
 }
 
@@ -113,7 +103,7 @@ function removeTransaction(e) {
 
     if (!permission) return
 
-    const updatedData = transactions.filter(t => t.id != parent.dataset.id)
+    const updatedData = transactions.filter(t => t.id !== Number(parent.dataset.id))
 
     transactions = updatedData
 
@@ -126,7 +116,7 @@ function removeTransaction(e) {
 function reset() {
     if (transactions.length === 0) return
 
-    if(!confirm('Are you sure you want to remove all the existing data')) return
+    if (!confirm('Are you sure you want to remove all the existing data')) return
 
     transactions = []
     clearLocalStorage()
@@ -189,6 +179,10 @@ document.body.addEventListener('click', (e) => {
     }
     if (e.target.closest('.reset-btn')) {
         reset()
+        return
+    }
+    if (e.target.closest('.toggle')) {
+        document.body.classList.toggle('dark-theme')
         return
     }
 })

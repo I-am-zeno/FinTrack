@@ -10,9 +10,10 @@
     --primary-blue-text: #1e40af;
     --accent-black: #000000;
     --green-light: #dcfce7;
-    --green-text: #5bfc56;
+    --green-text: #22691f;
     --red-light: #fee2e2;
     --red-text: #991b1b;
+    --shadow: rgba(0,0,0,0.08);
 }
 
 /* Dark Mode Variables applied when .dark-theme is on body */
@@ -26,6 +27,8 @@ body.dark-theme {
     --primary-blue: #374151;
     --primary-blue-text: #60a5fa;
     --accent-black: #ffffff;
+    /* --green-text: #5bfc56;
+    --red-text: #fc5656; */
 }
 
 * {
@@ -47,6 +50,7 @@ main {
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
+    transition: background 0.3s ease;
 }
 
 aside {
@@ -180,7 +184,13 @@ body.dark-theme .add-btn {
     padding: 1.25rem;
     border-radius: 1rem;
     background: var(--bg-card);
+    color: var(--text-dark);
+    box-shadow: 0px 2px 15px var(--shadow);
 }
+
+/* body.dark-theme .card{
+    
+} */
 
 .card>div:nth-child(1) {
     width: 100%;
@@ -201,13 +211,13 @@ body.dark-theme .add-btn {
 }
 
 .total-income>div i {
-    background: #448a4865;
-    color: #5bfc56;
+    background: var(--green-light);
+    color: var(--green-text);
 }
 
 .total-expense>div i {
-    background: #8a444465;
-    color: rgb(252, 86, 86);
+    background: var(--red-light);
+    color: var(--red-text);
 }
 
 .card>p:nth-of-type(1) {
@@ -221,14 +231,23 @@ body.dark-theme .add-btn {
 }
 
 .total-income>p:nth-of-type(2) {
-    color: rgb(91, 252, 86);
+    color: var(--green-text);
+}
+
+body.dark-theme .total-income>p:nth-of-type(2){
+    color: #5bfc56;
 }
 
 .total-expense>p:nth-of-type(2) {
+    color: var(--red-text);
+}
+
+body.dark-theme .total-expense>p:nth-of-type(2){
     color: #fc5656;
 }
 
 .chart-section {
+    color: var(--text-dark);
     margin-bottom: 1.5rem;
     display: flex;
     gap: 1.25rem;
@@ -248,6 +267,7 @@ canvas {
 }
 
 .chart-container {
+    box-shadow: 0px 0px 15px var(--shadow);
     display: flex;
     flex-direction: column;
     background: var(--bg-card);
@@ -259,6 +279,7 @@ canvas {
 }
 
 .preferences {
+    box-shadow: 0px 0px 15px var(--shadow);
     padding: 1.25rem;
     background: var(--bg-card);
     border: solid 1px var(--border-color);
@@ -269,6 +290,7 @@ canvas {
 
 .preferences h2 {
     margin-bottom: 2.5rem;
+    color: var(--text-dark);
 }
 
 .dark-mode {
@@ -281,6 +303,7 @@ canvas {
 }
 
 .dark-mode p {
+    color: var(--text-dark);
     font-weight: bold;
 }
 
@@ -291,9 +314,7 @@ canvas {
     background: var(--text-muted);
     display: flex;
     align-items: center;
-    justify-content: end;
     padding: 0rem 0.2rem;
-    transition: all 0.3s ease;
     cursor: pointer;
 }
 
@@ -302,10 +323,16 @@ body.dark-theme .toggle {
 }
 
 .toggle-circle {
+    transition: all 0.3s ease;
+    transform: translateX(0);
     border-radius: 10rem;
     width: 20px;
     height: 20px;
     background: #FFF;
+}
+
+body.dark-theme .toggle-circle{
+    transform: translateX(24px);
 }
 
 .reset-btn {
@@ -325,6 +352,8 @@ body.dark-theme .toggle {
 }
 
 .transactions-section {
+    box-shadow: 0px 0px 15px var(--shadow);
+    color: var(--text-dark);
     border: solid 1px var(--border-color);
     width: 65%;
     background: var(--bg-card);
@@ -357,11 +386,11 @@ body.dark-theme .toggle {
 }
 
 .search input {
+    color: var(--text-dark);
     font-size: 0.9rem;
     background: var(--bg-main);
     outline: none;
     border: none;
-    color: white;
 }
 
 .filter {
@@ -375,6 +404,7 @@ body.dark-theme .toggle {
 
 .transaction-search select {
     background: var(--bg-main);
+    color: var(--text-dark);
 }
 
 .transaction-details {
@@ -415,6 +445,7 @@ body.dark-theme .toggle {
     color: white;
 }
 .transaction>div:nth-of-type(1) p{
+    color: var(--text-dark);
     background: var(--bg-main);
     padding: 0.2rem 0.4rem;
     border-radius: 0.2rem;
@@ -443,7 +474,15 @@ body.dark-theme .toggle {
     color: var(--green-text);
 }
 
+body.dark-theme .transaction[data-type="Income"]{
+    color: #5bfc56;
+}
+
 .transaction[data-type="Expense"] {
+    color: var(--red-text);
+}
+
+body.dark-theme .transaction[data-type="Expense"]{
     color: #fc5656;
 }
 
@@ -458,6 +497,7 @@ body.dark-theme .toggle {
 }
 
 .add-transaction {
+    color: var(--text-dark);
     background: var(--bg-card);
     padding: 2rem;
     border-radius: 1rem;
@@ -489,7 +529,7 @@ body.dark-theme .toggle {
     width: 100%;
     background: var(--bg-main);
     padding: 0.6rem;
-    color: white;
+    color: var(--text-dark);
     border-radius: 0.3rem;
     outline: none;
     border: solid 1px var(--border-color);
@@ -535,6 +575,10 @@ body.dark-theme .toggle {
     border: none;
     cursor: pointer;
     margin-top: 1rem;
+}
+
+.add-transaction > select{
+    color: var(--text-dark);
 }
 
 .none{
